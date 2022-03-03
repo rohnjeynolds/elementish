@@ -1,0 +1,19 @@
+{
+  "name": "elementish",
+  "version": "1.0.0",
+  "description": "Stub library representing Element.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohnjeynolds/elementish.git"
+  },
+  "author": "John Reynolds",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rohnjeynolds/elementish/issues"
+  },
+  "homepage": "https://github.com/rohnjeynolds/elementish#readme"
+}
