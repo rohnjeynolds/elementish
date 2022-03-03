@@ -23,7 +23,6 @@ jobs:
         with:
           release_branch: main
           release_strategy: none
-          tag_format: "v%major%.%minor%.%patch%"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
