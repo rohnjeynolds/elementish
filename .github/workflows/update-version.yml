@@ -33,7 +33,7 @@ jobs:
       - name: Update package.json
         run: |
           echo ${{ steps.semver.outputs }}
-          echo ${{ steps.semver.outputs }}
+          echo ${{ steps.semver.outputs.tag }}
           version=${${{ steps.semver.outputs.tag }}:1}
           echo $version
           # sed "s#.*\"version\".*#  \"version\": \"$version\",#" package.json
