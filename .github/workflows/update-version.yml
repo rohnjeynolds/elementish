@@ -25,10 +25,14 @@ jobs:
           tag_format: "v%major%.%minor%.%patch%"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo ${{ steps.semver.outputs }}
+          echo ${{ steps.semver.outputs.tag }}
 
       # Runs a set of commands using the runners shell
       - name: Update package.json
         run: |
+          echo ${{ steps.semver.outputs }}
           echo ${{ steps.semver.outputs.tag }}
           version=${${{ steps.semver.outputs.tag }}:1}
           echo $version
