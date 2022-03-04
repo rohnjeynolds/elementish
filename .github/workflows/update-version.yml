@@ -18,6 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      #- uses: actions/setup-node@v2
+      #  with:
+      #    node-version: '12.16.3'
+
       # Determines next minor version
       - name: Get next version
         id: semver
@@ -28,17 +32,43 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Runs a set of commands using the runners shell
-      - name: Update package.json
+      - name: 'Set new version in environment variable'
         run: |
           tag=${{steps.semver.outputs.tag}}
           version="${tag:1}"
-          sed -i "s/.*\"version\".*/  \"version\": \"$version\",/" package.json
-          git add package.json
-          npm i --package-lock-only
-          git commit -m "Updating version in package.json to $version."
-          git tag -a $tag
-          git push
-          git push --tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "tag=$tag" >> $GITHUB_ENV
+          echo "version=$version" >> $GITHUB_ENV
+
+      - name: 'Update package.json version'
+        uses: reedyuk/npm-version@1.1.1
+        with:
+          version: ${{ env.version }}
+          git-tag-version: true
+
+      # Updates package.json and package-lock.json.
+      #- name: Update package.json
+      #  run: |
+      #    npm --version
+      #    tag=${{steps.semver.outputs.tag}}
+      #    version="${tag:1}"
+      #    sed -i "s/.*\"version\".*/  \"version\": \"$version\",/" package.json
+      #    git add package.json
+      #    npm i --package-lock-only
+      #    git commit -m "Updating version in package.json to $version."
+      #    git tag -a $tag
+      #    git push
+      #    git push --tags
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Commit and push package.json and package-lock.json changes.
+      #- name: Commit package file changes
+      #  uses: github-actions-x/commit@v2.8
+      #  with:
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
+      #    push-branch: 'main'
+      #    commit-message: 'Update package.json and package-lock.json with new version.'
+      #    force-add: 'true'
+      #    files: a.txt b.txt c.txt dirA/ dirB/ dirC/a.txt
+      #    name: commiter name
+      #    email: my.github@email.com 
