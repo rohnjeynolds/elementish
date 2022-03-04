@@ -43,9 +43,16 @@ jobs:
         uses: reedyuk/npm-version@1.1.1
         with:
           version: ${{ env.version }}
-          git-tag-version: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Commit and push"
+        uses: github-actions-x/commit@v2.8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'main'
+          commit-message: 'Update package-json and package-lock.json with new version.'
+          files: package.json package-lock.json
+          name: Github Actions
+          email: github-actions@github.com
 
       # Updates package.json and package-lock.json.
       #- name: Update package.json
