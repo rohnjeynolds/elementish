@@ -31,13 +31,12 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Update package.json
         run: |
+          which npm
           tag=${{steps.semver.outputs.tag}}
           version="${tag:1}"
-          echo $tag
-          echo $version
-          # sed "s#.*\"version\".*#  \"version\": \"$version\",#" package.json
-          # git add package.json
-          # git commit -m "Updating version to $version"
-          # git tag -a ${} steps.semver.outputs.tag }}
-          # git push
-          # git push --tags
+          sed "s#.*\"version\".*#  \"version\": \"$version\",#" package.json
+          git add package.json
+          git commit -m "Updating version in package.json to $version."
+          git tag -a "$tag"
+          git push
+          git push --tags
