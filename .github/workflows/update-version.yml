@@ -44,6 +44,8 @@ jobs:
         with:
           version: ${{ env.version }}
           git-tag-version: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Updates package.json and package-lock.json.
       #- name: Update package.json
