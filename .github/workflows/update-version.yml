@@ -35,9 +35,7 @@ jobs:
       - name: 'Set new version in environment variable'
         run: |
           tag=${{steps.semver.outputs.tag}}
-          version="${tag:1}"
-          echo "tag=$tag" >> $GITHUB_ENV
-          echo "version=$version" >> $GITHUB_ENV
+          echo "version=${tag:1}" >> $GITHUB_ENV
 
       - name: 'Update package.json version'
         uses: reedyuk/npm-version@1.1.1
