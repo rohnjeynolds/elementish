@@ -32,7 +32,7 @@ jobs:
       - name: Update package.json
         run: |
           tag=${{steps.semver.outputs.tag}}
-          version=${$tag:1}
+          version="${tag:1}"
           echo $tag
           echo $version
           # sed "s#.*\"version\".*#  \"version\": \"$version\",#" package.json
