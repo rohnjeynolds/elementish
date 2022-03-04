@@ -62,8 +62,6 @@ jobs:
           npm version $version
           git tag -a $tag
           git push --tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Commit and push package.json and package-lock.json changes.
       #- name: Commit package file changes
