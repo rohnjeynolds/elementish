@@ -32,43 +32,38 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Set new version in environment variable'
-        run: |
-          tag=${{steps.semver.outputs.tag}}
-          version="${tag:1}"
-          echo "tag=$tag" >> $GITHUB_ENV
-          echo "version=$version" >> $GITHUB_ENV
+      #- name: 'Set new version in environment variable'
+      #  run: |
+      #    tag=${{steps.semver.outputs.tag}}
+      #    echo "version=${tag:1}" >> $GITHUB_ENV
 
-      - name: 'Update package.json version'
-        uses: reedyuk/npm-version@1.1.1
-        with:
-          version: ${{ env.version }}
+      #- name: 'Update package.json version'
+      #  uses: reedyuk/npm-version@1.1.1
+      #  with:
+      #    version: ${{ env.version }}
 
-      - name: "Commit and push"
-        uses: github-actions-x/commit@v2.8
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: 'main'
-          commit-message: 'Update package-json and package-lock.json with new version.'
-          files: package.json package-lock.json
-          name: Github Actions
-          email: github-actions@github.com
+      #- name: "Commit and push"
+      #  uses: github-actions-x/commit@v2.8
+      #  with:
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
+      #    push-branch: 'main'
+      #    commit-message: 'Update package-json and package-lock.json with new version.'
+      #    files: package.json package-lock.json
+      #    name: Github Actions
+      #    email: github-actions@github.com
 
       # Updates package.json and package-lock.json.
-      #- name: Update package.json
-      #  run: |
-      #    npm --version
-      #    tag=${{steps.semver.outputs.tag}}
-      #    version="${tag:1}"
-      #    sed -i "s/.*\"version\".*/  \"version\": \"$version\",/" package.json
-      #    git add package.json
-      #    npm i --package-lock-only
-      #    git commit -m "Updating version in package.json to $version."
-      #    git tag -a $tag
-      #    git push
-      #    git push --tags
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update package.json
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "Github Actions"
+          tag=${{steps.semver.outputs.tag}}
+          version="${tag:1}"
+          npm version $version
+          git tag -a $tag
+          git push --tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Commit and push package.json and package-lock.json changes.
       #- name: Commit package file changes
