@@ -18,10 +18,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      #- uses: actions/setup-node@v2
-      #  with:
-      #    node-version: '12.16.3'
-
       # Determines next minor version
       - name: Get next version
         id: semver
@@ -32,27 +28,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      #- name: 'Set new version in environment variable'
-      #  run: |
-      #    tag=${{steps.semver.outputs.tag}}
-      #    echo "version=${tag:1}" >> $GITHUB_ENV
-
-      #- name: 'Update package.json version'
-      #  uses: reedyuk/npm-version@1.1.1
-      #  with:
-      #    version: ${{ env.version }}
-
-      #- name: "Commit and push"
-      #  uses: github-actions-x/commit@v2.8
-      #  with:
-      #    github-token: ${{ secrets.GITHUB_TOKEN }}
-      #    push-branch: 'main'
-      #    commit-message: 'Update package-json and package-lock.json with new version.'
-      #    files: package.json package-lock.json
-      #    name: Github Actions
-      #    email: github-actions@github.com
-
-      # Updates package.json and package-lock.json.
+      # Updates package.json and package-lock.json with new version.
       - name: Update package.json
         run: |
           git config user.email "github-actions@github.com"
@@ -62,15 +38,3 @@ jobs:
           npm version $version
           git status
           git push --tags
-
-      # Commit and push package.json and package-lock.json changes.
-      #- name: Commit package file changes
-      #  uses: github-actions-x/commit@v2.8
-      #  with:
-      #    github-token: ${{ secrets.GITHUB_TOKEN }}
-      #    push-branch: 'main'
-      #    commit-message: 'Update package.json and package-lock.json with new version.'
-      #    force-add: 'true'
-      #    files: a.txt b.txt c.txt dirA/ dirB/ dirC/a.txt
-      #    name: commiter name
-      #    email: my.github@email.com 
