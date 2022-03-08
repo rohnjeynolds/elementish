@@ -36,7 +36,5 @@ jobs:
           tag=${{steps.semver.outputs.tag}}
           version="${tag:1}"
           npm version $version
-          git add package.json package-lock.json
-          git commit -m "Bumping version in package.json and package-lock.json"
           git push
           git push --tags
