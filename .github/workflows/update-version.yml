@@ -60,6 +60,7 @@ jobs:
           tag=${{steps.semver.outputs.tag}}
           version="${tag:1}"
           npm version $version
+          git status
           git push --tags
 
       # Commit and push package.json and package-lock.json changes.
