@@ -55,12 +55,12 @@ jobs:
     strategy:
       matrix:
         label: ${{ github.event.pull_request.labels.*.name }}
+        exclude:
+          - major
+          - minor
+          - patch
 
     steps:
-      - name: Filter on label
-        run: |
-          echo ${{ matrix.label }}
-
       - name: Set node version
         if: ${{ startsWith(matrix.label, 'be-fe-') }}
         uses: actions/setup-node@v1
