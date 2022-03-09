@@ -1,6 +1,6 @@
 {
   "name": "elementish",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Stub library representing Element.",
   "main": "index.js",
   "scripts": {
