@@ -57,7 +57,12 @@ jobs:
         label: ${{ github.event.pull_request.labels.*.name }}
 
     steps:
+      - name: Filter on label
+        run: |
+          echo ${{ matrix.label }}
+
       - name: Set node version
+        if: ${{ startsWith(matrix.label, 'be-fe-') }}
         uses: actions/setup-node@v1
         with:
           node-version: "12.16.3"
@@ -69,4 +74,4 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: rohnjeynolds/${{ matrix.label }}
           event-type: dependency-version-bumped
-          client-payload: '{"actor": "${{ github.actor }}", "feature-branch": "${{ github.head_ref }}", "tag": "${{ needs.bump-version.outputs.tag }}"'
+          client-payload: '{"actor": "${{ github.actor }}", "feature-branch": "${{ github.head_ref }}", "tag": "${{ needs.bump-version.outputs.tag }}"}'
