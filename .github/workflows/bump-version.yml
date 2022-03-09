@@ -1,0 +1,72 @@
+name: Bump version
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  bump-version:
+    name: Bump version
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Set node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.3
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Determines next minor version
+      - name: Get next version
+        id: semver
+        uses: K-Phoen/semver-release-action@master
+        with:
+          release_branch: main
+          release_strategy: none
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Updates package.json and package-lock.json with new version.
+      - name: Update package files
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "Github Actions"
+          tag=${{ steps.semver.outputs.tag }}
+          version="${tag:1}"
+          npm version $version
+          git push
+          git push --tags
+
+    # Output the new tag.
+    outputs:
+      tag: ${{ steps.semver.outputs.tag }}
+
+  update-brand-sites:
+    needs: bump-version
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        label: ${{ github.event.pull_request.labels.*.name }}
+
+    steps:
+      - name: Set node version
+        if: ${{ startsWith(matrix.label, 'be-fe-') }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.16.3
+
+      - name: Update brand sites to use new version
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: rohnjeynolds/${{ matrix.label }}
+          event-type: dependency-version-bumped
+          client-payload: '{"actor": "${{ github.actor }}", "feature-branch": "${{ github.head_ref }}", "tag": "${{ needs.bump-version.outputs.tag }}"'
