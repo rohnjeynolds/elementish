@@ -63,7 +63,7 @@ jobs:
           node-version: "12.16.3"
 
       - name: Update brand sites to use new version
-        if: ${{ startsWith(matrix.label, "be-fe-") }}
+        if: ${{ startsWith(matrix.label, 'be-fe-') }}
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
