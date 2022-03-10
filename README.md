@@ -2,4 +2,4 @@
 
 Stub library representing Element.
 
-Simply exports the current time.
+Simply exports a welcome message to be displayed on the main page.
