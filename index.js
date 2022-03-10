@@ -1,1 +1,1 @@
-module.exports = new Date().toLocaleTimeString('en-US');
+module.exports = 'Welcome to be-fe-ish, a really boring site.';
