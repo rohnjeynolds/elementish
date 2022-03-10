@@ -74,4 +74,4 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: rohnjeynolds/${{ matrix.label }}
           event-type: dependency-version-bumped
-          client-payload: '{"actor": "${{ github.actor }}", "feature-branch": "${{ github.head_ref }}", "tag": "${{ needs.bump-version.outputs.tag }}"}'
+          client-payload: '{"actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>", "feature-branch": "${{ github.head_ref }}", "tag": "${{ needs.bump-version.outputs.tag }}"}'
