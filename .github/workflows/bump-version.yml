@@ -40,7 +40,7 @@ jobs:
           git config user.name "Github Actions"
           tag=${{ steps.semver.outputs.tag }}
           version="${tag:1}"
-          npm version $version
+          npm version $version -m "Updating package files to reflect version $version."
           git push
           git push --tags
 
