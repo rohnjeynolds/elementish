@@ -12,18 +12,18 @@ jobs:
     name: Bump version
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Set node version.
     steps:
       - name: Set node version
         uses: actions/setup-node@v1
         with:
           node-version: "12.16.3"
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Check out repo.
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Determines next minor version
+      # Determine next minor version.
       - name: Get next version
         id: semver
         uses: K-Phoen/semver-release-action@master
@@ -33,7 +33,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Updates package.json and package-lock.json with new version.
+      # Update package.json and package-lock.json with new version.
       - name: Update package files
         run: |
           git config user.email "github-actions@github.com"
@@ -44,7 +44,7 @@ jobs:
           git push
           git push --tags
 
-    # Output the new tag.
+    # Output the new tag for next job to use.
     outputs:
       tag: ${{ steps.semver.outputs.tag }}
 
