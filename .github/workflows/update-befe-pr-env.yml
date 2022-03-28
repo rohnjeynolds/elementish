@@ -5,7 +5,7 @@ on:
     types:
       - synchronize
     branches:
-      - feature/**
+      - main
 
 jobs:
   update-brand-sites:
