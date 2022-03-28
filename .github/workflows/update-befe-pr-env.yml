@@ -1,7 +1,9 @@
 name: Open be-fe pull request
 
 on:
-  push:
+  pull_request:
+    types:
+      - synchronize
     branches:
       - feature/*
 
