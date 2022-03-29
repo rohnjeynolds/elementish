@@ -33,4 +33,4 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: rohnjeynolds/${{ matrix.label }}
           event-type: element-feature-branch-updated
-          client-payload: '{"actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>", "feature-branch": "${{ github.ref_name }}"}'
+          client-payload: '{"actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>", "feature-branch": "${{ github.head_ref }}"}'
