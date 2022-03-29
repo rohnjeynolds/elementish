@@ -26,6 +26,10 @@ jobs:
         with:
           node-version: "12.16.3"
 
+      - name: Get last commit message
+        run: |
+          echo ::set-env name=commit-message::$(git log --format=%B -n 1 ${{ github.event.after }})
+
       - name: Update feature branch in be-fe repos
         if: ${{ startsWith(matrix.label, 'be-fe-') }}
         uses: peter-evans/repository-dispatch@v1
@@ -36,5 +40,5 @@ jobs:
           client-payload: '{
             "actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>",
             "feature-branch": "${{ github.head_ref }}",
-            "commit-message": "${{ github.event.head_commit.message }}"
+            "commit-message": "${{ env.commit-message }}"
           }'
