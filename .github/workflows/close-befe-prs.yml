@@ -1,4 +1,4 @@
-name: Cut tag
+name: Close befe pull requests
 
 on:
   pull_request:
@@ -48,7 +48,7 @@ jobs:
     outputs:
       tag: ${{ steps.semver.outputs.tag }}
 
-  update-befes:
+  close-befe-prs:
     needs: cut-tag
     runs-on: ubuntu-latest
 
@@ -61,19 +61,13 @@ jobs:
           - label: patch
 
     steps:
-      - name: Set node version
-        if: ${{ startsWith(matrix.label, 'be-fe-') }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.16.3"
-
-      - name: Update befe repos to use new tag
+      - name: Close be-fe pull request
         if: ${{ startsWith(matrix.label, 'be-fe-') }}
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: rohnjeynolds/${{ matrix.label }}
-          event-type: elementish-tag-cut
+          event-type: elementish-pr-closed
           client-payload: '{
             "actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>",
             "feature-branch": "${{ github.head_ref }}",
