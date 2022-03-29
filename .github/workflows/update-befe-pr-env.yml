@@ -1,9 +1,11 @@
 name: Open be-fe pull request
 
 on:
-  push:
+  pull_request:
+    types:
+      - synchronize
     branches:
-      - feature/*
+      - main
 
 jobs:
   update-brand-sites:
@@ -24,6 +26,14 @@ jobs:
         with:
           node-version: "12.16.3"
 
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Get last commit message
+        run: echo "commit-message=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
+
       - name: Update feature branch in be-fe repos
         if: ${{ startsWith(matrix.label, 'be-fe-') }}
         uses: peter-evans/repository-dispatch@v1
@@ -31,4 +41,8 @@ jobs:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: rohnjeynolds/${{ matrix.label }}
           event-type: element-feature-branch-updated
-          client-payload: '{"actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>", "feature-branch": "${{ github.ref_name }}"}'
+          client-payload: '{
+            "actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>",
+            "feature-branch": "${{ github.head_ref }}",
+            "commit-message": "${{ env.commit-message }}"
+          }'
