@@ -26,7 +26,9 @@ jobs:
           ref: ${{ github.head_ref }}
 
       - name: Get last commit message
-        run: echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
+        run: |
+          commitmsg=$(git log --format=%B -n 1 ${{ github.event.after }}) | tr \" \\\"
+          echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
 
       - name: Create feature branch and PR in be-fe repos
         if: ${{ startsWith(matrix.label, 'be-fe-') }}
