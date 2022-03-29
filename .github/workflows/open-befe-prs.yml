@@ -1,14 +1,14 @@
-name: Open be-fe pull request
+name: Open be-fe pull requests
 
 on:
   pull_request:
     types:
-      - synchronize
+      - opened
     branches:
       - main
 
 jobs:
-  update-brand-sites:
+  open-befe-prs:
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,29 +20,24 @@ jobs:
           - label: patch
 
     steps:
-      - name: Set node version
-        if: ${{ startsWith(matrix.label, 'be-fe-') }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: "12.16.3"
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
 
       - name: Get last commit message
-        run: echo "commit-message=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
+        run: |
+          echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.after }})" | sed 's/"/\\"/g' >> $GITHUB_ENV
 
-      - name: Update feature branch in be-fe repos
+      - name: Create feature branch and PR in be-fe repos
         if: ${{ startsWith(matrix.label, 'be-fe-') }}
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: rohnjeynolds/${{ matrix.label }}
-          event-type: element-feature-branch-updated
+          event-type: elementish-pr-opened
           client-payload: '{
             "actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>",
             "feature-branch": "${{ github.head_ref }}",
-            "commit-message": "${{ env.commit-message }}"
+            "commit-message": "${{ env.COMMIT_MESSAGE }}"
           }'
