@@ -1,1 +1,1 @@
-module.exports = 'Welcome to be-fe-ish, the saddest site on the whole of the Interwebs.';
+module.exports = 'Welcome to be-fe-ish, the most pointless site on the whole of the Interwebs.';
