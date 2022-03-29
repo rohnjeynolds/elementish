@@ -1,0 +1,81 @@
+name: Cut tag
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
+
+jobs:
+  cut-tag:
+    name: Cut tag
+    runs-on: ubuntu-latest
+
+    # Set node version.
+    steps:
+      - name: Set node version
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.16.3"
+
+      # Check out repo.
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Determine next minor version.
+      - name: Get next version
+        id: semver
+        uses: K-Phoen/semver-release-action@master
+        with:
+          release_branch: main
+          release_strategy: none
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Update package.json and package-lock.json with new version.
+      - name: Update package files
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "Github Actions"
+          tag=${{ steps.semver.outputs.tag }}
+          version="${tag:1}"
+          npm version $version -m "Updating package files to reflect version $version."
+          git push
+          git push --tags
+
+    # Output the new tag for next job to use.
+    outputs:
+      tag: ${{ steps.semver.outputs.tag }}
+
+  update-befes:
+    needs: cut-tag
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        label: ${{ github.event.pull_request.labels.*.name }}
+        exclude:
+          - label: major
+          - label: minor
+          - label: patch
+
+    steps:
+      - name: Set node version
+        if: ${{ startsWith(matrix.label, 'be-fe-') }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.16.3"
+
+      - name: Update befe repos to use new tag
+        if: ${{ startsWith(matrix.label, 'be-fe-') }}
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: rohnjeynolds/${{ matrix.label }}
+          event-type: elementish-tag-cut
+          client-payload: '{
+            "actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>",
+            "feature-branch": "${{ github.head_ref }}",
+            "tag": "${{ needs.cut-tag.outputs.tag }}"
+          }'
