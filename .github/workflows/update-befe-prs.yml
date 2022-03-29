@@ -42,7 +42,7 @@ jobs:
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: rohnjeynolds/${{ matrix.label }}
-          event-type: element-pr-updated
+          event-type: elementish-pr-updated
           client-payload: '{
             "actor": "${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>",
             "feature-branch": "${{ github.head_ref }}",
