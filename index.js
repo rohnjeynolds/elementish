@@ -1,1 +1,1 @@
-module.exports = 'Welcome to be-fe-ish, where the elite meet.';
+module.exports = 'Welcome to be-fe-ish. Now please go away.';
