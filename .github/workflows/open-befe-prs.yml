@@ -9,7 +9,7 @@ on:
 
 jobs:
   open-befe-prs:
-    if: github.event.pull_request.labels != null
+    if: github.event.pull_request.labels != '[]'
     runs-on: ubuntu-latest
 
     strategy:
