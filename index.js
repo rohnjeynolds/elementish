@@ -1,1 +1,1 @@
-module.exports = 'Welcome to be-fe-ish, you filthy animal.';
+module.exports = 'Welcome to be-fe-ish. Tell us your best dad joke.';
