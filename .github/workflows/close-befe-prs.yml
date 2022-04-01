@@ -9,6 +9,7 @@ on:
 
 jobs:
   cut-tag:
+    if: ${{ github.event.pull_request.merged == true }}
     name: Cut tag
     runs-on: ubuntu-latest
 
