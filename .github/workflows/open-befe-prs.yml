@@ -5,6 +5,7 @@ on:
     types:
       - opened
       - reopened
+      - labeled
     branches:
       - main
 
