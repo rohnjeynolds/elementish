@@ -1,1 +1,1 @@
-module.exports = 'Welcome to be-fe-ish, where the README is generally trustworthy.';
+module.exports = 'Welcome to be-fe-ish. Now where\'s my cheddar?';
